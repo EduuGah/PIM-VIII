@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>AT-Integra Mobile</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:14.5px/1.42 "Segoe UI",Roboto,Arial,sans-serif;background:#eef1f6;
+       display:flex;gap:46px;justify-content:center;align-items:center;height:800px}
+  .phone{width:360px;height:660px;background:#fff;border-radius:30px;border:9px solid #16202e;
+         overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(16,30,52,.22)}
+  .status{background:#0f2744;color:#fff;font-size:10.5px;padding:7px 16px 4px;display:flex;
+          justify-content:space-between}
+  .hdr{background:#0f2744;color:#fff;padding:5px 16px 14px}
+  .hdr b{font-size:16px;display:block}
+  .hdr small{font-size:11px;color:#9bb4d4}
+  .tabs{display:flex;background:#143462}
+  .tabs span{flex:1;text-align:center;padding:9px 0;font-size:11.5px;color:#9bb4d4;font-weight:600}
+  .tabs span.on{color:#fff;box-shadow:inset 0 -3px 0 #49a0ff}
+  .wrap{padding:12px;height:470px;overflow:hidden;background:#f4f6fa}
+  .c{background:#fff;border:1px solid #e3e8f0;border-radius:10px;padding:11px 12px;margin-bottom:9px}
+  .c .l{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+  .pr{font-family:Consolas,monospace;font-size:10px;color:#6b7686}
+  .tag{padding:2px 8px;border-radius:12px;font-size:9.5px;font-weight:700}
+  .crit{background:#fde8e6;color:#c0362c}.alta{background:#fff1e0;color:#b36a00}
+  .media{background:#e7f0fe;color:#1b63d8}
+  .c b{font-size:13px;display:block;margin-bottom:3px}
+  .c small{color:#7b8794;font-size:11px;display:block}
+  .meta{display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;
+        border-top:1px solid #f2f5f9;font-size:10.5px}
+  .meta .sla{font-weight:700;color:#d2453c}
+  .meta .ok{font-weight:700;color:#0f7d60}
+  .nav{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e3e8f0;
+       display:flex;padding:9px 0 13px}
+  .nav div{flex:1;text-align:center;font-size:9.5px;color:#9aa5b4}
+  .nav div.on{color:#1b63d8;font-weight:700}
+  .nav i{display:block;width:19px;height:19px;border-radius:6px;background:#dde3ec;margin:0 auto 4px}
+  .nav div.on i{background:#1b63d8}
+  /* tela 2 */
+  .det{padding:14px;background:#f4f6fa;height:470px}
+  .box{background:#fff;border:1px solid #e3e8f0;border-radius:10px;padding:13px;margin-bottom:10px}
+  .lin{display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px;
+       border-bottom:1px solid #f4f6fa}
+  .lin:last-child{border:0}
+  .lin span{color:#7b8794}.lin b{font-weight:600}
+  .ta{width:100%;height:62px;border:1px solid #dde3ec;border-radius:8px;padding:8px;
+      font-size:11.5px;color:#4a5costs;background:#fbfcfe}
+  .ta{color:#43506a}
+  .bt{width:100%;background:#1b63d8;color:#fff;border:0;border-radius:9px;padding:12px;
+      font-size:13px;font-weight:700;margin-top:4px}
+  .bt2{background:#fff;color:#1b63d8;border:1.5px solid #c3d6f5;margin-top:8px}
+  .off{background:#fff5e0;border:1px solid #f0dcae;color:#9a6a06;border-radius:8px;
+       padding:8px 10px;font-size:10.5px;margin-bottom:10px}
+  /* tela 3 */
+  .big{text-align:center;padding:22px 14px 10px}
+  .big b{font-size:30px;display:block;color:#0f2744}
+  .big small{color:#7b8794;font-size:11px}
+  .gr{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px}
+  .g{background:#fff;border:1px solid #e3e8f0;border-radius:10px;padding:11px;text-align:center}
+  .g b{display:block;font-size:19px;color:#0f2744}
+  .g small{font-size:9.5px;color:#7b8794;text-transform:uppercase;letter-spacing:.4px}
+  .bars{padding:14px}
+  .brow{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:10.5px}
+  .brow span{width:56px;color:#7b8794}
+  .brow div{flex:1;height:8px;background:#edf1f7;border-radius:4px;overflow:hidden}
+  .brow div i{display:block;height:100%;background:#1b63d8}
+  .brow em{font-style:normal;width:30px;text-align:right;font-weight:700;color:#0f2744}
+  .cap{position:absolute;bottom:-28px;width:100%;text-align:center;font-size:11px;color:#6b7686}
+</style>
+</head>
+<body>
+
+<!-- ============ TELA 1: fila do técnico ============ -->
+<div class="phone">
+  <div class="status"><span>09:41</span><span>▮▮▮ 4G ▮ 82%</span></div>
+  <div class="hdr"><b>Meus atendimentos</b><small>Allison Miguel · Técnico de campo</small></div>
+  <div class="tabs"><span class="on">Em aberto (5)</span><span>Hoje (3)</span><span>Histórico</span></div>
+  <div class="wrap">
+    <div class="c">
+      <div class="l"><span class="pr">AT20261116-9F3A2C</span><span class="tag crit">CRÍTICA</span></div>
+      <b>Indisponibilidade do ERP</b>
+      <small>Vetrix Logística · Av. das Nações, 1.280 — Filial Sul</small>
+      <div class="meta"><span>Contrato GOLD</span><span class="sla">SLA 00:18</span></div>
+    </div>
+    <div class="c">
+      <div class="l"><span class="pr">AT20261115-22C7E1</span><span class="tag alta">ALTA</span></div>
+      <b>Falha de autenticação no portal</b>
+      <small>Northline Varejo · R. Bento Freitas, 340 — Centro</small>
+      <div class="meta"><span>Contrato SILVER</span><span class="ok">SLA 03:05</span></div>
+    </div>
+    <div class="c">
+      <div class="l"><span class="pr">AT20261115-A41F08</span><span class="tag alta">ALTA</span></div>
+      <b>Backup incremental não concluído</b>
+      <small>Vetrix Logística · Data center Tamboré</small>
+      <div class="meta"><span>Contrato GOLD</span><span class="ok">SLA 05:22</span></div>
+    </div>
+    <div class="c">
+      <div class="l"><span class="pr">AT20261114-18BB45</span><span class="tag media">MÉDIA</span></div>
+      <b>Inclusão de usuário no diretório</b>
+      <small>Grupo Marcolini · Atendimento remoto</small>
+      <div class="meta"><span>Contrato GOLD</span><span class="ok">SLA 23:58</span></div>
+    </div>
+  </div>
+  <div class="nav">
+    <div class="on"><i></i>Chamados</div><div><i></i>Agenda</div>
+    <div><i></i>Apontar</div><div><i></i>Perfil</div>
+  </div>
+</div>
+
+<!-- ============ TELA 2: execução em campo ============ -->
+<div class="phone">
+  <div class="status"><span>11:07</span><span>▮▮ SEM REDE ▮ 74%</span></div>
+  <div class="hdr"><b>AT20261116-9F3A2C</b><small>Vetrix Logística · Prioridade crítica</small></div>
+  <div class="tabs"><span>Dados</span><span class="on">Execução</span><span>Anexos</span></div>
+  <div class="det">
+    <div class="off">⚠ Sem conexão. O registro será sincronizado automaticamente quando a rede retornar.</div>
+    <div class="box">
+      <div class="lin"><span>Abertura</span><b>16/11 09:12</b></div>
+      <div class="lin"><span>Prazo de SLA</span><b style="color:#d2453c">16/11 11:12</b></div>
+      <div class="lin"><span>Horas apontadas</span><b>1h35</b></div>
+      <div class="lin"><span>Status</span><b>Em atendimento</b></div>
+    </div>
+    <div class="box">
+      <b style="font-size:11.5px;display:block;margin-bottom:7px">Solução aplicada</b>
+      <div class="ta">Reinício do serviço de aplicação e reindexação do volume
+      compartilhado. Validado acesso com o usuário solicitante.</div>
+    </div>
+    <button class="bt">Concluir atendimento</button>
+    <button class="bt bt2">Registrar apontamento de horas</button>
+  </div>
+  <div class="nav">
+    <div class="on"><i></i>Chamados</div><div><i></i>Agenda</div>
+    <div><i></i>Apontar</div><div><i></i>Perfil</div>
+  </div>
+</div>
+
+</body>
+</html>

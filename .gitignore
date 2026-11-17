@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# Temporários do Office e do sistema
+~$*
+*.tmp
+Thumbs.db
+desktop.ini

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>Quadro Kanban</title>
+<style>
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{font:12px/1.35 "Segoe UI",Arial,sans-serif;background:#eef1f6;color:#1f2733;
+      width:1340px;height:700px;padding:16px 18px}
+ .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+ h1{font-size:15.5px;font-weight:600}
+ h1 small{display:block;font-size:11px;color:#7b8794;font-weight:400;margin-top:2px}
+ .chips{display:flex;gap:8px}
+ .chip{background:#fff;border:1px solid #dde3ec;border-radius:7px;padding:6px 11px;font-size:11px}
+ .chip b{color:#0f2744}
+ .cols{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+ .col{background:#f4f6fa;border:1px solid #e0e6ef;border-radius:9px;padding:9px}
+ .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+ .ch b{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:#54606f}
+ .wip{font-size:9.5px;background:#e3e9f2;color:#5a6676;border-radius:10px;padding:2px 7px;font-weight:700}
+ .wip.est{background:#fde8e6;color:#c0362c}
+ .card{background:#fff;border:1px solid #e3e8f0;border-radius:8px;padding:9px 10px;margin-bottom:8px;
+       border-top:3px solid #1b63d8}
+ .card.g{border-top-color:#16a97f}.card.o{border-top-color:#e8a33d}
+ .card.p{border-top-color:#7d5bd6}.card.r{border-top-color:#d2453c}
+ .id{font-family:Consolas,monospace;font-size:9.5px;color:#8b95a3}
+ .card b{display:block;font-size:11.5px;font-weight:600;margin:3px 0 6px}
+ .ft{display:flex;justify-content:space-between;align-items:center}
+ .sp{background:#eef2f8;border-radius:10px;padding:2px 7px;font-size:9.5px;font-weight:700;color:#45515f}
+ .av{width:21px;height:21px;border-radius:50%;background:#1b63d8;color:#fff;font-size:9px;
+     display:grid;place-items:center;font-weight:700}
+ .av.b{background:#16a97f}.av.c{background:#e8853d}.av.d{background:#7d5bd6}.av.e{background:#d2453c}
+</style></head><body>
+<div class="bar">
+  <h1>Quadro Kanban — Sprint 6 (projeto AT-Integra)
+    <small>Período de 19/10 a 01/11/2026 · meta: módulo de SLA e esteira de implantação contínua</small></h1>
+  <div class="chips">
+    <div class="chip">Compromisso: <b>34 pts</b></div>
+    <div class="chip">Concluído: <b>29 pts</b></div>
+    <div class="chip">Lead time médio: <b>3,4 dias</b></div>
+    <div class="chip">Throughput: <b>9 itens</b></div>
+  </div>
+</div>
+
+<div class="cols">
+  <div class="col"><div class="ch"><b>Backlog da sprint</b><span class="wip">3</span></div>
+    <div class="card"><span class="id">AT-141</span><b>Relatório de faturamento por contrato</b>
+      <div class="ft"><span class="sp">5 pts</span><span class="av">VF</span></div></div>
+    <div class="card o"><span class="id">AT-147</span><b>Exportação de indicadores em CSV</b>
+      <div class="ft"><span class="sp">3 pts</span><span class="av c">CA</span></div></div>
+    <div class="card"><span class="id">AT-152</span><b>Filtro por período no painel</b>
+      <div class="ft"><span class="sp">2 pts</span><span class="av d">MF</span></div></div>
+  </div>
+
+  <div class="col"><div class="ch"><b>Em desenvolvimento</b><span class="wip est">3 / 3</span></div>
+    <div class="card r"><span class="id">AT-136</span><b>Distribuição automática da fila de chamados</b>
+      <div class="ft"><span class="sp">8 pts</span><span class="av b">AM</span></div></div>
+    <div class="card g"><span class="id">AT-139</span><b>Sincronização offline do app mobile</b>
+      <div class="ft"><span class="sp">8 pts</span><span class="av e">GA</span></div></div>
+    <div class="card p"><span class="id">AT-144</span><b>Trigger de auditoria de status</b>
+      <div class="ft"><span class="sp">3 pts</span><span class="av">VF</span></div></div>
+  </div>
+
+  <div class="col"><div class="ch"><b>Revisão de código</b><span class="wip">2 / 3</span></div>
+    <div class="card g"><span class="id">AT-128</span><b>Procedure sp_AbrirChamado com transação</b>
+      <div class="ft"><span class="sp">5 pts</span><span class="av c">CA</span></div></div>
+    <div class="card"><span class="id">AT-133</span><b>Autenticação JWT com perfis de acesso</b>
+      <div class="ft"><span class="sp">5 pts</span><span class="av d">MF</span></div></div>
+  </div>
+
+  <div class="col"><div class="ch"><b>Homologação</b><span class="wip">2 / 4</span></div>
+    <div class="card g"><span class="id">AT-121</span><b>Painel de operações — fila prioritária</b>
+      <div class="ft"><span class="sp">8 pts</span><span class="av b">AM</span></div></div>
+    <div class="card o"><span class="id">AT-126</span><b>Índice coberto do painel operacional</b>
+      <div class="ft"><span class="sp">3 pts</span><span class="av e">GA</span></div></div>
+  </div>
+
+  <div class="col"><div class="ch"><b>Concluído</b><span class="wip">4</span></div>
+    <div class="card g"><span class="id">AT-112</span><b>Pipeline CI/CD com quality gate</b>
+      <div class="ft"><span class="sp">8 pts</span><span class="av">VF</span></div></div>
+    <div class="card g"><span class="id">AT-115</span><b>Cálculo de SLA por nível de contrato</b>
+      <div class="ft"><span class="sp">5 pts</span><span class="av c">CA</span></div></div>
+    <div class="card g"><span class="id">AT-118</span><b>Imagem Docker com usuário sem privilégio</b>
+      <div class="ft"><span class="sp">3 pts</span><span class="av b">AM</span></div></div>
+    <div class="card g"><span class="id">AT-120</span><b>HPA do cluster AKS</b>
+      <div class="ft"><span class="sp">5 pts</span><span class="av d">MF</span></div></div>
+  </div>
+</div>
+</body></html>

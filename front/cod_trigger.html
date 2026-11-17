@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>04_triggers.sql</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f2f5;font:13px "Segoe UI",Arial,sans-serif;padding:16px}
+.win{background:#1e1e1e;border-radius:9px;overflow:hidden;
+     box-shadow:0 10px 28px rgba(15,25,45,.26)}
+.tb{background:#323233;display:flex;align-items:center;padding:0 12px;height:35px;gap:9px}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%;display:block}
+.tab{background:#1e1e1e;color:#ffffff;font-size:11.5px;padding:8px 14px;border-top:1.5px solid #0a84ff;
+     margin-left:8px;display:flex;align-items:center;gap:6px}
+.tab em{font-style:normal;color:#8a8a8a}
+.path{margin-left:auto;color:#9a9a9a;font-size:10.5px;font-family:Consolas,monospace}
+.code{display:flex;padding:11px 0 13px}
+.ln{color:#6e7681;text-align:right;padding:0 11px 0 15px;font:12.6px/1.62 Consolas,"Cascadia Mono",monospace;
+    user-select:none;border-right:1px solid #2b2b2b}
+pre{margin:0;padding:0 16px;font:12.6px/1.62 Consolas,"Cascadia Mono",monospace;color:#d4d4d4;
+    white-space:pre;overflow:visible}
+.sb{background:#007acc;color:#fff;font-size:10.5px;padding:3px 12px;display:flex;gap:16px}
+.sb span:last-child{margin-left:auto}
+
+.k{color:#569cd6}
+.kd{color:#569cd6}
+.kn{color:#569cd6}
+.kr{color:#569cd6}
+.kt{color:#569cd6}
+.kc{color:#569cd6}
+.kp{color:#569cd6}
+.c{color:#6a9955}
+.c1{color:#6a9955}
+.cm{color:#6a9955}
+.cs{color:#6a9955}
+.cp{color:#9b9b9b}
+.s{color:#ce9178}
+.s1{color:#ce9178}
+.s2{color:#ce9178}
+.sb{color:#ce9178}
+.sd{color:#ce9178}
+.se{color:#d7ba7d}
+.sh{color:#ce9178}
+.sx{color:#ce9178}
+.m{color:#b5cea8}
+.mi{color:#b5cea8}
+.mf{color:#b5cea8}
+.mh{color:#b5cea8}
+.n{color:#d4d4d4}
+.na{color:#9cdcfe}
+.nb{color:#4ec9b0}
+.nc{color:#4ec9b0}
+.nd{color:#dcdcaa}
+.nf{color:#dcdcaa}
+.ni{color:#9cdcfe}
+.nl{color:#c8c8c8}
+.nn{color:#4ec9b0}
+.nt{color:#569cd6}
+.nv{color:#9cdcfe}
+.no{color:#4fc1ff}
+.ne{color:#4ec9b0}
+.nx{color:#dcdcaa}
+.o{color:#d4d4d4}
+.ow{color:#569cd6}
+.p{color:#d4d4d4}
+.w{color:#d4d4d4}
+body{width:1040px}
+</style></head><body>
+<div class="win">
+  <div class="tb">
+    <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i>
+      <i style="background:#28c840"></i></div>
+    <div class="tab"><span style="color:#e8853d">&#9679;</span>04_triggers.sql
+      <em>&#215;</em></div>
+    <div class="path">codigo/banco/04_triggers.sql</div>
+  </div>
+  <div class="code"><div class="ln">6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31</div><pre><span class="w">   </span><span class="n">Escrito</span><span class="w"> </span><span class="n">em</span><span class="w"> </span><span class="n">logica</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">conjunto</span><span class="w"> </span><span class="p">(</span><span class="k">set</span><span class="o">-</span><span class="n">based</span><span class="p">)</span><span class="w"> </span><span class="n">para</span><span class="w"> </span><span class="n">suportar</span><span class="w"> </span><span class="n">atualizacoes</span>
+<span class="w">   </span><span class="n">em</span><span class="w"> </span><span class="n">lote</span><span class="w"> </span><span class="n">sem</span><span class="w"> </span><span class="n">degradar</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">desempenho</span><span class="p">.</span><span class="w"> </span><span class="o">*/</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">ALTER</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">dbo</span><span class="p">.</span><span class="n">trg_Chamado_AuditarStatus</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">dbo</span><span class="p">.</span><span class="n">Chamado</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">UPDATE</span>
+<span class="k">AS</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="n">NOCOUNT</span><span class="w"> </span><span class="k">ON</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">(</span><span class="n">Status</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">dbo</span><span class="p">.</span><span class="n">ChamadoHistorico</span>
+<span class="w">          </span><span class="p">(</span><span class="n">ChamadoId</span><span class="p">,</span><span class="w"> </span><span class="n">StatusAnterior</span><span class="p">,</span><span class="w"> </span><span class="n">StatusNovo</span><span class="p">,</span><span class="w"> </span><span class="n">Observacao</span><span class="p">,</span><span class="w"> </span><span class="n">RegistradoEm</span><span class="p">,</span><span class="w"> </span><span class="n">RegistradoPor</span><span class="p">)</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w">  </span><span class="n">i</span><span class="p">.</span><span class="n">ChamadoId</span><span class="p">,</span>
+<span class="w">            </span><span class="n">d</span><span class="p">.</span><span class="n">Status</span><span class="p">,</span>
+<span class="w">            </span><span class="n">i</span><span class="p">.</span><span class="n">Status</span><span class="p">,</span>
+<span class="w">            </span><span class="n">CONCAT</span><span class="p">(</span><span class="s1">'Transicao automatica '</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">Status</span><span class="p">,</span><span class="w"> </span><span class="s1">' -&gt; '</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">Status</span><span class="p">),</span>
+<span class="w">            </span><span class="n">SYSUTCDATETIME</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">SUSER_SNAME</span><span class="p">()</span>
+<span class="w">      </span><span class="k">FROM</span><span class="w">  </span><span class="n">inserted</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">i</span>
+<span class="w">      </span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">deleted</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">ChamadoId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">ChamadoId</span>
+<span class="w">     </span><span class="k">WHERE</span><span class="w">  </span><span class="n">i</span><span class="p">.</span><span class="n">Status</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">Status</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="k">GO</span>
+
+<span class="cm">/* INSTEAD OF DELETE: converte a exclusao fisica em exclusao logica,</span>
+</pre></div>
+  <div class="sb"><span>AlunosTech.sln</span><span>Ln 6</span>
+    <span>UTF-8</span><span>Gatilho de auditoria</span></div>
+</div>
+</body></html>

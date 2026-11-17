@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>Arquitetura em camadas</title>
+<style>
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{font:12.5px/1.4 "Segoe UI",Arial,sans-serif;background:#fff;color:#1f2733;
+      width:1180px;height:720px;padding:18px 22px}
+ h1{font-size:16px;font-weight:600}
+ .sub{font-size:11.5px;color:#7b8794;margin-bottom:15px}
+ .lay{border:1.5px solid #d7e0ee;border-radius:10px;margin-bottom:11px;display:flex;overflow:hidden}
+ .tag{width:168px;padding:13px 14px;color:#fff;display:flex;flex-direction:column;justify-content:center}
+ .tag b{font-size:13px}.tag small{font-size:10.3px;opacity:.85}
+ .cnt{flex:1;padding:11px 13px;display:grid;grid-template-columns:repeat(4,1fr);gap:9px;background:#fbfcff}
+ .box{border:1.2px solid #dde5f0;border-radius:7px;background:#fff;padding:7px 9px}
+ .box b{display:block;font-size:11.4px;font-weight:600}
+ .box small{font-size:10.2px;color:#7b8794}
+ .c1{background:#1b63d8}.c2{background:#16a97f}.c3{background:#7d5bd6}.c4{background:#e8853d}
+ .dir{text-align:center;color:#8b9ab0;font-size:13px;margin:-4px 0 7px;letter-spacing:2px}
+ .note{border:1.3px solid #d7e0ee;border-radius:9px;padding:11px 13px;background:#f8fbff;
+       font-size:11px;color:#45515f;margin-top:4px}
+ .note b{color:#0f2744}
+</style></head><body>
+<h1>Organização em camadas da solução .NET (Clean Architecture)</h1>
+<div class="sub">O fluxo de dependência aponta sempre para o domínio; as camadas externas conhecem
+as internas, nunca o contrário</div>
+
+<div class="lay"><div class="tag c1"><b>Apresentação</b><small>AlunosTech.API · Web · Desktop · Mobile</small></div>
+  <div class="cnt">
+    <div class="box"><b>ChamadosController</b><small>Endpoints REST v1</small></div>
+    <div class="box"><b>Portal web</b><small>Razor Pages · Bootstrap</small></div>
+    <div class="box"><b>PainelOperacoesViewModel</b><small>WPF · MVVM</small></div>
+    <div class="box"><b>ChamadoViewModel</b><small>.NET MAUI · MVVM</small></div>
+  </div></div>
+<div class="dir">▼ depende de ▼</div>
+
+<div class="lay"><div class="tag c2"><b>Aplicação</b><small>AlunosTech.Application</small></div>
+  <div class="cnt">
+    <div class="box"><b>ChamadoService</b><small>Orquestra o caso de uso</small></div>
+    <div class="box"><b>DTOs e validadores</b><small>Data Annotations</small></div>
+    <div class="box"><b>IChamadoService</b><small>Contrato de aplicação</small></div>
+    <div class="box"><b>Mapeadores</b><small>Entidade → DTO</small></div>
+  </div></div>
+<div class="dir">▼ depende de ▼</div>
+
+<div class="lay"><div class="tag c3"><b>Domínio</b><small>AlunosTech.Domain (núcleo)</small></div>
+  <div class="cnt">
+    <div class="box"><b>Chamado</b><small>Raiz de agregação</small></div>
+    <div class="box"><b>ApontamentoHoras</b><small>Entidade</small></div>
+    <div class="box"><b>ICalculoSlaStrategy</b><small>Padrão Strategy</small></div>
+    <div class="box"><b>IRepositorio&lt;T&gt;, IUnitOfWork</b><small>Abstrações de persistência</small></div>
+  </div></div>
+<div class="dir">▲ implementa as abstrações ▲</div>
+
+<div class="lay"><div class="tag c4"><b>Infraestrutura</b><small>AlunosTech.Infrastructure</small></div>
+  <div class="cnt">
+    <div class="box"><b>AtIntegraDbContext</b><small>EF Core 8 · SQL Server</small></div>
+    <div class="box"><b>ChamadoRepositorio</b><small>EF Core + Dapper</small></div>
+    <div class="box"><b>UnitOfWork</b><small>Controle transacional</small></div>
+    <div class="box"><b>NotificacaoService</b><small>Service Bus · SMTP</small></div>
+  </div></div>
+
+<div class="note"><b>Benefício prático observado:</b> como o domínio não referencia
+Entity Framework nem ASP.NET Core, as 42 regras de SLA foram testadas por unidade sem banco de
+dados, o que reduziu o tempo da bateria de testes do pipeline de 4 min 10 s para 38 s e permitiu
+reaproveitar integralmente o mesmo núcleo nos módulos web, desktop e mobile.</div>
+</body></html>

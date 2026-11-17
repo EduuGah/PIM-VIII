@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>Pipeline CI/CD</title>
+<style>
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{font:12.5px/1.4 "Segoe UI",Arial,sans-serif;background:#0d1117;color:#c9d1d9;
+      width:1300px;height:640px;padding:16px 20px}
+ .hd{display:flex;justify-content:space-between;align-items:flex-start;
+     border-bottom:1px solid #21262d;padding-bottom:12px;margin-bottom:15px}
+ h1{font-size:16px;color:#e6edf3;font-weight:600}
+ .meta{font-size:11.5px;color:#8b949e;margin-top:4px}
+ .meta b{color:#58a6ff;font-weight:600}
+ .ok{background:#1a7f37;color:#fff;border-radius:20px;padding:4px 13px;font-size:11.5px;font-weight:600}
+ .flow{display:flex;align-items:stretch;gap:0}
+ .stg{flex:1;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:11px 12px}
+ .sep{display:grid;place-items:center;width:28px;color:#3d9142;font-size:15px}
+ .stg h2{font-size:12px;color:#e6edf3;font-weight:600;display:flex;align-items:center;gap:6px;
+         margin-bottom:3px}
+ .dot{width:9px;height:9px;border-radius:50%;background:#3fb950;display:inline-block}
+ .tm{font-size:10.3px;color:#8b949e;margin-bottom:9px}
+ .step{display:flex;align-items:center;gap:7px;padding:4.5px 0;font-size:11px;color:#adbac7;
+       border-bottom:1px solid #21262d}
+ .step:last-child{border:0}
+ .step i{color:#3fb950;font-style:normal;font-size:11px}
+ .step span{margin-left:auto;color:#6e7681;font-size:10px}
+ .gate{background:#1c2128;border:1px solid #30363d;border-left:3px solid #d29922;border-radius:7px;
+       padding:8px 11px;margin-top:9px;font-size:10.5px;color:#d0b273}
+ .mt{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-top:15px}
+ .m{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px 12px}
+ .m b{display:block;font-size:19px;color:#e6edf3;font-weight:600}
+ .m small{font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px}
+ .m i{font-style:normal;font-size:10.3px;color:#3fb950}
+ .log{background:#161b22;border:1px solid #30363d;border-radius:8px;margin-top:14px;padding:10px 13px;
+      font-family:Consolas,monospace;font-size:10.8px;color:#8b949e}
+ .log div{padding:1.5px 0}
+ .g{color:#3fb950}.y{color:#d29922}.b{color:#58a6ff}.w{color:#c9d1d9}
+</style></head><body>
+<div class="hd">
+  <div><h1>CI/CD AT-Integra · execução #218</h1>
+    <div class="meta">Commit <b>a7f2d19</b> em <b>main</b> · acionado por push de
+      Carlos E. de Oliveira · 16/11/2026 08:42</div></div>
+  <div class="ok">✓ Concluído em 6 min 42 s</div>
+</div>
+
+<div class="flow">
+  <div class="stg"><h2><span class="dot"></span>Build e testes</h2><div class="tm">2 min 14 s</div>
+    <div class="step"><i>✓</i>Checkout do repositório<span>4s</span></div>
+    <div class="step"><i>✓</i>Restore de dependências<span>31s</span></div>
+    <div class="step"><i>✓</i>Build Release<span>48s</span></div>
+    <div class="step"><i>✓</i>142 testes de unidade<span>38s</span></div>
+    <div class="step"><i>✓</i>Cobertura: 86,4%<span>13s</span></div>
+    <div class="gate">Quality gate: cobertura mínima de 80% — aprovado</div>
+  </div>
+  <div class="sep">▶</div>
+  <div class="stg"><h2><span class="dot"></span>Análise e segurança</h2><div class="tm">1 min 36 s</div>
+    <div class="step"><i>✓</i>SonarQube · 0 bug crítico<span>42s</span></div>
+    <div class="step"><i>✓</i>Dependências vulneráveis<span>11s</span></div>
+    <div class="step"><i>✓</i>Build da imagem Docker<span>29s</span></div>
+    <div class="step"><i>✓</i>Trivy · 0 CRITICAL / 0 HIGH<span>14s</span></div>
+    <div class="step"><i>✓</i>Assinatura da imagem<span>8s</span></div>
+    <div class="gate">Política DevSecOps: falha automática em CRITICAL ou HIGH</div>
+  </div>
+  <div class="sep">▶</div>
+  <div class="stg"><h2><span class="dot"></span>Homologação</h2><div class="tm">1 min 29 s</div>
+    <div class="step"><i>✓</i>Push para o ACR<span>26s</span></div>
+    <div class="step"><i>✓</i>Migração do banco<span>19s</span></div>
+    <div class="step"><i>✓</i>Rollout no AKS (hml)<span>33s</span></div>
+    <div class="step"><i>✓</i>Testes de integração<span>11s</span></div>
+    <div class="gate">Ambiente espelho de produção com dados anonimizados</div>
+  </div>
+  <div class="sep">▶</div>
+  <div class="stg"><h2><span class="dot"></span>Produção (blue-green)</h2><div class="tm">1 min 23 s</div>
+    <div class="step"><i>✓</i>Aprovação do Product Owner<span>—</span></div>
+    <div class="step"><i>✓</i>Deploy no ambiente green<span>37s</span></div>
+    <div class="step"><i>✓</i>Smoke test /health<span>9s</span></div>
+    <div class="step"><i>✓</i>Troca de tráfego<span>3s</span></div>
+    <div class="gate">Rollback automático se o smoke test falhar</div>
+  </div>
+</div>
+
+<div class="mt">
+  <div class="m"><small>Implantações / mês</small><b>42</b><i>▲ de 2 para 42</i></div>
+  <div class="m"><small>Lead time de mudança</small><b>1,8 d</b><i>▼ de 21 dias</i></div>
+  <div class="m"><small>Falha em mudança</small><b>4,2%</b><i>▼ de 27%</i></div>
+  <div class="m"><small>Tempo de restauração</small><b>11 min</b><i>▼ de 6 horas</i></div>
+  <div class="m"><small>Builds com sucesso</small><b>96,7%</b><i>últimos 90 dias</i></div>
+</div>
+
+<div class="log">
+  <div><span class="b">[08:48:51]</span> <span class="w">kubectl rollout status deployment/atintegra-api-green -n producao</span></div>
+  <div><span class="b">[08:48:52]</span> Waiting for deployment rollout to finish: 1 of 3 updated replicas are available...</div>
+  <div><span class="b">[08:49:04]</span> Waiting for deployment rollout to finish: 2 of 3 updated replicas are available...</div>
+  <div><span class="b">[08:49:16]</span> <span class="g">deployment "atintegra-api-green" successfully rolled out</span></div>
+  <div><span class="b">[08:49:17]</span> <span class="w">./devops/scripts/smoke-test.sh https://green.atintegra.com.br/health</span></div>
+  <div><span class="b">[08:49:26]</span> <span class="g">HTTP 200 · healthy · db=ok · cache=ok · latencia=186ms</span></div>
+  <div><span class="b">[08:49:29]</span> <span class="g">service/atintegra-api patched — tráfego redirecionado para versao=green</span></div>
+</div>
+</body></html>

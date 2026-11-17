@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>Modelo de dados</title>
+<style>
+ body{margin:0;background:#fff;width:1240px;height:760px;
+      font:12px "Segoe UI",Arial,sans-serif}
+ .t{font:600 15.5px "Segoe UI";fill:#1f2733}
+ .s{font:11.5px "Segoe UI";fill:#7b8794}
+ .en{font:600 12px "Segoe UI";fill:#fff}
+ .at{font:11px Consolas,monospace;fill:#2d3845}
+ .pk{font:700 11px Consolas,monospace;fill:#1b63d8}
+ .fk{font:700 11px Consolas,monospace;fill:#b36a00}
+ .card{font:700 10.5px "Segoe UI";fill:#54606f}
+ .lin{stroke:#9aacc4;stroke-width:1.4;fill:none}
+ .leg{font:11px "Segoe UI";fill:#5a6676}
+</style></head><body>
+<svg width="1240" height="760" xmlns="http://www.w3.org/2000/svg">
+  <text class="t" x="24" y="30">Modelo entidade-relacionamento da base AT-Integra (recorte do núcleo transacional)</text>
+  <text class="s" x="24" y="50">Microsoft SQL Server 2022 · chaves primárias em azul, chaves estrangeiras em laranja</text>
+
+  <!-- CLIENTE -->
+  <g transform="translate(40,90)">
+    <rect width="222" height="150" rx="8" fill="#fff" stroke="#d7e0ee" stroke-width="1.4"/>
+    <rect width="222" height="30" rx="8" fill="#1b63d8"/><rect y="20" width="222" height="10" fill="#1b63d8"/>
+    <text class="en" x="12" y="20">CLIENTE</text>
+    <text class="pk" x="12" y="50">PK ClienteId · uniqueidentifier</text>
+    <text class="at" x="12" y="70">RazaoSocial · varchar(150)</text>
+    <text class="at" x="12" y="88">CpfCnpj · varchar(18) UNIQUE</text>
+    <text class="at" x="12" y="106">Segmento · varchar(60)</text>
+    <text class="at" x="12" y="124">CriadoEm · datetime2</text>
+    <text class="at" x="12" y="142">Ativo · bit</text>
+  </g>
+
+  <!-- CONTRATO -->
+  <g transform="translate(40,300)">
+    <rect width="222" height="168" rx="8" fill="#fff" stroke="#d7e0ee" stroke-width="1.4"/>
+    <rect width="222" height="30" rx="8" fill="#1b63d8"/><rect y="20" width="222" height="10" fill="#1b63d8"/>
+    <text class="en" x="12" y="20">CONTRATO</text>
+    <text class="pk" x="12" y="50">PK ContratoId</text>
+    <text class="fk" x="12" y="68">FK ClienteId</text>
+    <text class="at" x="12" y="86">NivelSla · char(6)</text>
+    <text class="at" x="12" y="104">ValorMensal · decimal(12,2)</text>
+    <text class="at" x="12" y="122">EmailResponsavel · varchar(120)</text>
+    <text class="at" x="12" y="140">VigenciaInicio · date</text>
+    <text class="at" x="12" y="158">VigenciaFim · date</text>
+  </g>
+
+  <!-- CHAMADO -->
+  <g transform="translate(430,170)">
+    <rect width="250" height="276" rx="8" fill="#fff" stroke="#1b63d8" stroke-width="2"/>
+    <rect width="250" height="30" rx="8" fill="#0f2744"/><rect y="20" width="250" height="10" fill="#0f2744"/>
+    <text class="en" x="12" y="20">CHAMADO</text>
+    <text class="pk" x="12" y="50">PK ChamadoId</text>
+    <text class="at" x="12" y="68">Protocolo · varchar(20) UNIQUE</text>
+    <text class="fk" x="12" y="86">FK ClienteId</text>
+    <text class="fk" x="12" y="104">FK ContratoId</text>
+    <text class="fk" x="12" y="122">FK TecnicoId (nulo)</text>
+    <text class="at" x="12" y="140">Titulo · varchar(120)</text>
+    <text class="at" x="12" y="158">Descricao · varchar(4000)</text>
+    <text class="at" x="12" y="176">Prioridade · tinyint CHECK 1-4</text>
+    <text class="at" x="12" y="194">Status · tinyint CHECK 1-5</text>
+    <text class="at" x="12" y="212">PrazoSla · datetime2</text>
+    <text class="at" x="12" y="230">ResolvidoEm · datetime2</text>
+    <text class="at" x="12" y="248">Versao · rowversion</text>
+    <text class="at" x="12" y="266">Ativo · bit (exclusão lógica)</text>
+  </g>
+
+  <!-- TECNICO -->
+  <g transform="translate(850,90)">
+    <rect width="230" height="132" rx="8" fill="#fff" stroke="#d7e0ee" stroke-width="1.4"/>
+    <rect width="230" height="30" rx="8" fill="#16a97f"/><rect y="20" width="230" height="10" fill="#16a97f"/>
+    <text class="en" x="12" y="20">TECNICO</text>
+    <text class="pk" x="12" y="50">PK TecnicoId</text>
+    <text class="at" x="12" y="70">Nome · varchar(120)</text>
+    <text class="at" x="12" y="88">Especialidade · varchar(60)</text>
+    <text class="at" x="12" y="106">CertificadoNivel2 · bit</text>
+    <text class="at" x="12" y="124">Ativo · bit</text>
+  </g>
+
+  <!-- APONTAMENTO -->
+  <g transform="translate(850,280)">
+    <rect width="230" height="150" rx="8" fill="#fff" stroke="#d7e0ee" stroke-width="1.4"/>
+    <rect width="230" height="30" rx="8" fill="#7d5bd6"/><rect y="20" width="230" height="10" fill="#7d5bd6"/>
+    <text class="en" x="12" y="20">APONTAMENTO_HORAS</text>
+    <text class="pk" x="12" y="50">PK ApontamentoId</text>
+    <text class="fk" x="12" y="68">FK ChamadoId</text>
+    <text class="fk" x="12" y="86">FK TecnicoId</text>
+    <text class="at" x="12" y="104">Inicio · datetime2</text>
+    <text class="at" x="12" y="122">Fim · datetime2</text>
+    <text class="at" x="12" y="140">Atividade · varchar(400)</text>
+  </g>
+
+  <!-- HISTORICO -->
+  <g transform="translate(430,500)">
+    <rect width="250" height="150" rx="8" fill="#fff" stroke="#d7e0ee" stroke-width="1.4"/>
+    <rect width="250" height="30" rx="8" fill="#e8853d"/><rect y="20" width="250" height="10" fill="#e8853d"/>
+    <text class="en" x="12" y="20">CHAMADO_HISTORICO</text>
+    <text class="pk" x="12" y="50">PK HistoricoId · bigint identity</text>
+    <text class="fk" x="12" y="68">FK ChamadoId</text>
+    <text class="at" x="12" y="86">StatusAnterior · tinyint</text>
+    <text class="at" x="12" y="104">StatusNovo · tinyint</text>
+    <text class="at" x="12" y="122">RegistradoEm · datetime2</text>
+    <text class="at" x="12" y="140">RegistradoPor · varchar(100)</text>
+  </g>
+
+  <!-- relacionamentos -->
+  <path class="lin" d="M151,240 L151,300"/>
+  <text class="card" x="158" y="258">1</text><text class="card" x="158" y="292">N</text>
+
+  <path class="lin" d="M262,160 L350,160 L350,230 L430,230"/>
+  <text class="card" x="268" y="152">1</text><text class="card" x="408" y="222">N</text>
+
+  <path class="lin" d="M262,384 L350,384 L350,330 L430,330"/>
+  <text class="card" x="268" y="376">1</text><text class="card" x="408" y="322">N</text>
+
+  <path class="lin" d="M850,156 L760,156 L760,250 L680,250"/>
+  <text class="card" x="834" y="148">1</text><text class="card" x="690" y="242">N</text>
+
+  <path class="lin" d="M680,350 L850,350"/>
+  <text class="card" x="690" y="342">1</text><text class="card" x="832" y="342">N</text>
+
+  <path class="lin" d="M555,446 L555,500"/>
+  <text class="card" x="562" y="462">1</text><text class="card" x="562" y="494">N</text>
+
+  <path class="lin" d="M965,222 L965,280"/>
+  <text class="card" x="972" y="240">1</text><text class="card" x="972" y="274">N</text>
+
+  <!-- legenda -->
+  <g transform="translate(40,500)">
+    <rect width="340" height="150" rx="8" fill="#f8fbff" stroke="#d7e0ee" stroke-width="1.3"/>
+    <text class="t" x="14" y="26" style="font-size:12.5px">Decisões de modelagem</text>
+    <text class="leg" x="14" y="50">▪ Terceira forma normal em todo o núcleo transacional</text>
+    <text class="leg" x="14" y="70">▪ rowversion para concorrência otimista</text>
+    <text class="leg" x="14" y="90">▪ Exclusão lógica preservando a trilha de auditoria</text>
+    <text class="leg" x="14" y="110">▪ Histórico alimentado por gatilho, não pela aplicação</text>
+    <text class="leg" x="14" y="130">▪ CHECK constraints replicando as regras do domínio C#</text>
+  </g>
+</svg>
+</body></html>

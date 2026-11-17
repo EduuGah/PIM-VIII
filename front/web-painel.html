@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>AT-Integra | Painel de Operações</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:14px/1.45 "Segoe UI",Roboto,Arial,sans-serif;background:#eef1f6;color:#1f2733}
+  .app{display:grid;grid-template-columns:230px 1fr;height:900px}
+  /* ---------- barra lateral ---------- */
+  .side{background:#0f2744;color:#c6d4e6;padding:18px 0;display:flex;flex-direction:column}
+  .brand{display:flex;align-items:center;gap:9px;padding:0 18px 20px;border-bottom:1px solid #1d3d63}
+  .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#2f7df6,#17b9a6);
+        display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+  .brand b{color:#fff;font-size:15px;letter-spacing:.2px}
+  .brand span{display:block;font-size:10px;color:#7f9bc0;font-weight:400}
+  .menu{padding:14px 10px;flex:1}
+  .menu p{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#6c87ad;margin:14px 10px 7px}
+  .menu a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:7px;
+          color:#c6d4e6;text-decoration:none;font-size:13.5px;margin-bottom:2px}
+  .menu a.on{background:#1b4475;color:#fff;font-weight:600}
+  .ico{width:17px;height:17px;border-radius:4px;background:#2f5584;display:inline-block}
+  .menu a.on .ico{background:#49a0ff}
+  .who{padding:12px 18px;border-top:1px solid #1d3d63;font-size:11.5px;color:#8ba6ca}
+  /* ---------- topo ---------- */
+  .main{display:flex;flex-direction:column;overflow:hidden}
+  .top{background:#fff;border-bottom:1px solid #dde3ec;padding:13px 24px;display:flex;
+       align-items:center;justify-content:space-between}
+  .top h1{font-size:17px;font-weight:600}
+  .top h1 small{display:block;font-size:11.5px;color:#7b8794;font-weight:400;margin-top:2px}
+  .search{background:#f1f4f9;border:1px solid #dde3ec;border-radius:7px;padding:7px 12px;
+          width:300px;color:#8b95a3;font-size:12.5px}
+  .btn{background:#1b63d8;color:#fff;border:0;border-radius:7px;padding:9px 15px;font-size:13px;font-weight:600}
+  .avatar{width:33px;height:33px;border-radius:50%;background:#1b63d8;color:#fff;display:grid;
+          place-items:center;font-size:12px;font-weight:600}
+  /* ---------- conteúdo ---------- */
+  .body{padding:20px 24px;overflow:auto}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:18px}
+  .kpi{background:#fff;border:1px solid #e3e8f0;border-radius:10px;padding:15px 16px}
+  .kpi span{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#7b8794}
+  .kpi b{display:block;font-size:27px;margin:7px 0 3px;font-weight:600}
+  .kpi i{font-style:normal;font-size:11.5px;font-weight:600}
+  .up{color:#12916f}.down{color:#d2453c}
+  .bar{height:4px;border-radius:3px;background:#edf1f7;margin-top:9px;overflow:hidden}
+  .bar div{height:100%;border-radius:3px}
+  .cards{display:grid;grid-template-columns:1.65fr 1fr;gap:15px}
+  .card{background:#fff;border:1px solid #e3e8f0;border-radius:10px}
+  .card h2{font-size:14px;font-weight:600;padding:13px 16px;border-bottom:1px solid #eef1f6;
+           display:flex;justify-content:space-between;align-items:center}
+  .card h2 em{font-style:normal;font-size:11.5px;color:#1b63d8;font-weight:600}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:#7b8794;text-align:left;
+     padding:9px 16px;background:#f8fafc;border-bottom:1px solid #eef1f6;font-weight:600}
+  td{padding:10px 16px;border-bottom:1px solid #f2f5f9;font-size:12.5px}
+  tr:last-child td{border-bottom:0}
+  .prot{font-family:Consolas,monospace;font-size:11.5px;color:#4a5costs}
+  .prot{font-family:Consolas,monospace;font-size:11.5px;color:#415165}
+  .tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.3px}
+  .crit{background:#fde8e6;color:#c0362c}.alta{background:#fff1e0;color:#b36a00}
+  .media{background:#e7f0fe;color:#1b63d8}.baixa{background:#eef1f6;color:#6b7686}
+  .ok{background:#e4f6ef;color:#0f7d60}
+  .sla{font-weight:600;font-size:12px}.estourado{color:#d2453c}.atencao{color:#c9800c}.dentro{color:#0f7d60}
+  .lista{padding:6px 0}
+  .item{display:flex;align-items:center;gap:11px;padding:9px 16px}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .item div{flex:1}
+  .item b{display:block;font-size:12.5px;font-weight:600}
+  .item small{color:#7b8794;font-size:11px}
+  .pct{font-size:12.5px;font-weight:700}
+  .foot{padding:11px 16px;border-top:1px solid #eef1f6;font-size:11px;color:#8b95a3}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">AT</div>
+      <div><b>AT-Integra</b><span>Alunos Tech · v1.4.0</span></div>
+    </div>
+    <nav class="menu">
+      <p>Operação</p>
+      <a class="on" href="#"><i class="ico"></i>Painel de operações</a>
+      <a href="#"><i class="ico"></i>Chamados</a>
+      <a href="#"><i class="ico"></i>Fila de distribuição</a>
+      <a href="#"><i class="ico"></i>Agenda de técnicos</a>
+      <p>Comercial</p>
+      <a href="#"><i class="ico"></i>Clientes</a>
+      <a href="#"><i class="ico"></i>Contratos e SLA</a>
+      <a href="#"><i class="ico"></i>Faturamento</a>
+      <p>Gestão</p>
+      <a href="#"><i class="ico"></i>Indicadores</a>
+      <a href="#"><i class="ico"></i>Auditoria</a>
+    </nav>
+    <div class="who">Carlos E. de Oliveira<br>Supervisor de operações</div>
+  </aside>
+
+  <section class="main">
+    <header class="top">
+      <div>
+        <h1>Painel de operações<small>Competência 11/2026 · atualizado há 2 min</small></h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="search">Buscar protocolo, cliente ou técnico…</div>
+        <button class="btn">+ Novo chamado</button>
+        <div class="avatar">CO</div>
+      </div>
+    </header>
+
+    <div class="body">
+      <div class="kpis">
+        <div class="kpi"><span>Chamados abertos</span><b>184</b>
+          <i class="down">▲ 6,4% vs. semana anterior</i>
+          <div class="bar"><div style="width:62%;background:#1b63d8"></div></div></div>
+        <div class="kpi"><span>Aderência ao SLA</span><b>96,8%</b>
+          <i class="up">▲ 11,3 p.p. após a implantação</i>
+          <div class="bar"><div style="width:96%;background:#16a97f"></div></div></div>
+        <div class="kpi"><span>Tempo médio de resolução</span><b>4h12</b>
+          <i class="up">▼ 2h48 em relação ao legado</i>
+          <div class="bar"><div style="width:44%;background:#16a97f"></div></div></div>
+        <div class="kpi"><span>Chamados críticos em risco</span><b>7</b>
+          <i class="down">3 com prazo inferior a 30 min</i>
+          <div class="bar"><div style="width:18%;background:#d2453c"></div></div></div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <h2>Fila prioritária <em>Ver todos os 184 chamados</em></h2>
+          <table>
+            <thead><tr><th>Protocolo</th><th>Cliente</th><th>Assunto</th><th>Prior.</th>
+            <th>Técnico</th><th>SLA</th></tr></thead>
+            <tbody>
+              <tr><td class="prot">AT20261116-9F3A2C</td><td>Vetrix Logística</td>
+                  <td>Indisponibilidade do ERP na filial Sul</td>
+                  <td><span class="tag crit">CRÍTICA</span></td><td>A. Miguel</td>
+                  <td class="sla estourado">00:18 restante</td></tr>
+              <tr><td class="prot">AT20261116-7B18D4</td><td>Grupo Marcolini</td>
+                  <td>Lentidão no acesso ao banco de dados fiscal</td>
+                  <td><span class="tag crit">CRÍTICA</span></td><td>G. Almeida</td>
+                  <td class="sla atencao">00:47 restante</td></tr>
+              <tr><td class="prot">AT20261115-22C7E1</td><td>Northline Varejo</td>
+                  <td>Falha de autenticação no portal do cliente</td>
+                  <td><span class="tag alta">ALTA</span></td><td>C. de Almeida</td>
+                  <td class="sla dentro">03:05 restante</td></tr>
+              <tr><td class="prot">AT20261115-A41F08</td><td>Vetrix Logística</td>
+                  <td>Backup incremental não concluído</td>
+                  <td><span class="tag alta">ALTA</span></td><td>V. Fulgoni</td>
+                  <td class="sla dentro">05:22 restante</td></tr>
+              <tr><td class="prot">AT20261115-D903B6</td><td>Clínica Albieri</td>
+                  <td>Instalação de certificado digital A1</td>
+                  <td><span class="tag media">MÉDIA</span></td><td>M. Figueredo</td>
+                  <td class="sla dentro">11:40 restante</td></tr>
+              <tr><td class="prot">AT20261114-5E7C90</td><td>Northline Varejo</td>
+                  <td>Troca de estação de trabalho — setor fiscal</td>
+                  <td><span class="tag baixa">BAIXA</span></td><td>Não atribuído</td>
+                  <td class="sla dentro">21:15 restante</td></tr>
+              <tr><td class="prot">AT20261114-18BB45</td><td>Grupo Marcolini</td>
+                  <td>Inclusão de usuário no diretório corporativo</td>
+                  <td><span class="tag baixa">BAIXA</span></td><td>A. Miguel</td>
+                  <td class="sla dentro">23:58 restante</td></tr>
+            </tbody>
+          </table>
+          <div class="foot">Exibindo 7 de 184 registros · consulta servida pela procedure
+            <b>sp_ListarPainelOperacional</b> em 41 ms</div>
+        </div>
+
+        <div class="card">
+          <h2>Aderência ao SLA por contrato</h2>
+          <div class="lista">
+            <div class="item"><span class="dot" style="background:#16a97f"></span>
+              <div><b>Vetrix Logística</b><small>Contrato GOLD · 62 chamados</small></div>
+              <span class="pct" style="color:#0f7d60">98,4%</span></div>
+            <div class="item"><span class="dot" style="background:#16a97f"></span>
+              <div><b>Grupo Marcolini</b><small>Contrato GOLD · 48 chamados</small></div>
+              <span class="pct" style="color:#0f7d60">97,9%</span></div>
+            <div class="item"><span class="dot" style="background:#e8a33d"></span>
+              <div><b>Northline Varejo</b><small>Contrato SILVER · 39 chamados</small></div>
+              <span class="pct" style="color:#c9800c">94,8%</span></div>
+            <div class="item"><span class="dot" style="background:#16a97f"></span>
+              <div><b>Clínica Albieri</b><small>Contrato SILVER · 21 chamados</small></div>
+              <span class="pct" style="color:#0f7d60">96,2%</span></div>
+            <div class="item"><span class="dot" style="background:#d2453c"></span>
+              <div><b>Pampa Agroindústria</b><small>Contrato SILVER · 14 chamados</small></div>
+              <span class="pct" style="color:#c0362c">89,3%</span></div>
+          </div>
+          <h2 style="border-top:1px solid #eef1f6">Saúde da plataforma</h2>
+          <div class="lista">
+            <div class="item"><span class="dot" style="background:#16a97f"></span>
+              <div><b>API ASP.NET Core</b><small>3 pods · p95 = 212 ms</small></div>
+              <span class="tag ok">ONLINE</span></div>
+            <div class="item"><span class="dot" style="background:#16a97f"></span>
+              <div><b>Azure SQL Database</b><small>DTU 38% · 0 deadlocks em 24 h</small></div>
+              <span class="tag ok">ONLINE</span></div>
+            <div class="item"><span class="dot" style="background:#16a97f"></span>
+              <div><b>Pipeline CI/CD</b><small>Build #218 · 6 min 42 s</small></div>
+              <span class="tag ok">SUCESSO</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

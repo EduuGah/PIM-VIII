@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>02_procedures.sql</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f2f5;font:13px "Segoe UI",Arial,sans-serif;padding:16px}
+.win{background:#1e1e1e;border-radius:9px;overflow:hidden;
+     box-shadow:0 10px 28px rgba(15,25,45,.26)}
+.tb{background:#323233;display:flex;align-items:center;padding:0 12px;height:40px;gap:9px}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%;display:block}
+.tab{background:#1e1e1e;color:#ffffff;font-size:13.5px;padding:8px 14px;border-top:1.5px solid #0a84ff;
+     margin-left:8px;display:flex;align-items:center;gap:6px}
+.tab em{font-style:normal;color:#8a8a8a}
+.path{margin-left:auto;color:#9a9a9a;font-size:12px;font-family:Consolas,monospace}
+.code{display:flex;padding:11px 0 13px}
+.ln{color:#6e7681;text-align:right;padding:0 11px 0 15px;font:15px/1.55 Consolas,"Cascadia Mono",monospace;
+    user-select:none;border-right:1px solid #2b2b2b}
+pre{margin:0;padding:0 16px;font:15px/1.55 Consolas,"Cascadia Mono",monospace;color:#d4d4d4;
+    white-space:pre;overflow:visible}
+.sb{background:#007acc;color:#fff;font-size:12px;padding:3px 12px;display:flex;gap:16px}
+.sb span:last-child{margin-left:auto}
+
+.k{color:#569cd6}
+.kd{color:#569cd6}
+.kn{color:#569cd6}
+.kr{color:#569cd6}
+.kt{color:#569cd6}
+.kc{color:#569cd6}
+.kp{color:#569cd6}
+.c{color:#6a9955}
+.c1{color:#6a9955}
+.cm{color:#6a9955}
+.cs{color:#6a9955}
+.cp{color:#9b9b9b}
+.s{color:#ce9178}
+.s1{color:#ce9178}
+.s2{color:#ce9178}
+.sb{color:#ce9178}
+.sd{color:#ce9178}
+.se{color:#d7ba7d}
+.sh{color:#ce9178}
+.sx{color:#ce9178}
+.m{color:#b5cea8}
+.mi{color:#b5cea8}
+.mf{color:#b5cea8}
+.mh{color:#b5cea8}
+.n{color:#d4d4d4}
+.na{color:#9cdcfe}
+.nb{color:#4ec9b0}
+.nc{color:#4ec9b0}
+.nd{color:#dcdcaa}
+.nf{color:#dcdcaa}
+.ni{color:#9cdcfe}
+.nl{color:#c8c8c8}
+.nn{color:#4ec9b0}
+.nt{color:#569cd6}
+.nv{color:#9cdcfe}
+.no{color:#4fc1ff}
+.ne{color:#4ec9b0}
+.nx{color:#dcdcaa}
+.o{color:#d4d4d4}
+.ow{color:#569cd6}
+.p{color:#d4d4d4}
+.w{color:#d4d4d4}
+body{width:900px}
+</style></head><body>
+<div class="win">
+  <div class="tb">
+    <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i>
+      <i style="background:#28c840"></i></div>
+    <div class="tab"><span style="color:#e8853d">&#9679;</span>02_procedures.sql
+      <em>&#215;</em></div>
+    <div class="path">codigo/banco/02_procedures.sql</div>
+  </div>
+  <div class="code"><div class="ln">24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42</div><pre><span class="w">    </span><span class="k">BEGIN</span><span class="w"> </span><span class="n">TRY</span>
+<span class="w">        </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
+
+<span class="w">        </span><span class="cm">/* Bloqueio de linha do contrato: impede que uma renegociacao</span>
+<span class="cm">           concorrente altere o nivel de SLA durante o calculo do prazo. */</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="o">@</span><span class="n">NivelSla</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NivelSla</span>
+<span class="w">          </span><span class="k">FROM</span><span class="w"> </span><span class="n">dbo</span><span class="p">.</span><span class="n">Contrato</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="p">(</span><span class="n">UPDLOCK</span><span class="p">,</span><span class="w"> </span><span class="n">ROWLOCK</span><span class="p">)</span>
+<span class="w">         </span><span class="k">WHERE</span><span class="w"> </span><span class="n">ContratoId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">@</span><span class="n">ContratoId</span>
+<span class="w">           </span><span class="k">AND</span><span class="w"> </span><span class="n">ClienteId</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">@</span><span class="n">ClienteId</span>
+<span class="w">           </span><span class="k">AND</span><span class="w"> </span><span class="n">Ativo</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">           </span><span class="k">AND</span><span class="w"> </span><span class="o">@</span><span class="n">Abertura</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">VigenciaInicio</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">VigenciaFim</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="o">@</span><span class="n">NivelSla</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span>
+<span class="w">            </span><span class="n">THROW</span><span class="w"> </span><span class="mi">50010</span><span class="p">,</span><span class="w"> </span><span class="s1">'Contrato inexistente, inativo ou fora de vigencia.'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="o">@</span><span class="n">Prioridade</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">4</span>
+<span class="w">            </span><span class="n">THROW</span><span class="w"> </span><span class="mi">50011</span><span class="p">,</span><span class="w"> </span><span class="s1">'Prioridade invalida. Valores aceitos: 1 a 4.'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+  <div class="sb"><span>AlunosTech.sln</span><span>Ln 24</span>
+    <span>UTF-8</span><span>SQL Server 2022</span></div>
+</div>
+</body></html>

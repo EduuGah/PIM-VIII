@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atintegra-api
+  namespace: producao
+  labels: { app: atintegra-api, versao: blue }
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }   # implantacao sem indisponibilidade
+  selector:
+    matchLabels: { app: atintegra-api }
+  template:
+    metadata:
+      labels: { app: atintegra-api, versao: blue }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: api
+          image: atintegraacr.azurecr.io/atintegra-api:1.4.0
+          ports: [{ containerPort: 8080 }]
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits:   { cpu: "1000m", memory: "512Mi" }
+          env:
+            - name: ConnectionStrings__AtIntegra
+              valueFrom:
+                secretKeyRef: { name: atintegra-secrets, key: connection-string }
+          livenessProbe:
+            httpGet: { path: /health, port: 8080 }
+            initialDelaySeconds: 20
+            periodSeconds: 30
+          readinessProbe:
+            httpGet: { path: /health, port: 8080 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: atintegra-api-hpa
+  namespace: producao
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: atintegra-api
+  minReplicas: 3
+  maxReplicas: 12
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: { type: Utilization, averageUtilization: 65 }
+    - type: Resource
+      resource:
+        name: memory
+        target: { type: Utilization, averageUtilization: 75 }
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300   # evita oscilacao de replicas

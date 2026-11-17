@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>Monitoramento</title>
+<style>
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{font:12px/1.4 "Segoe UI",Arial,sans-serif;background:#111217;color:#d8d9da;
+      width:1300px;height:620px;padding:14px 18px}
+ .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+ h1{font-size:15px;color:#fff;font-weight:600}
+ h1 small{display:block;font-size:10.5px;color:#8e8e8e;font-weight:400;margin-top:2px}
+ .rng{display:flex;gap:7px}
+ .r{background:#1f2026;border:1px solid #2c3235;border-radius:5px;padding:5px 11px;font-size:11px}
+ .r.on{border-color:#3d71d9;color:#8ab4f8}
+ .g{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:11px}
+ .p{background:#181b1f;border:1px solid #2c3235;border-radius:6px;padding:10px 12px}
+ .p h2{font-size:10.5px;color:#9fa7b3;font-weight:600;margin-bottom:7px;
+       text-transform:uppercase;letter-spacing:.5px}
+ .v{font-size:27px;font-weight:600;color:#fff}
+ .v span{font-size:12px;color:#8e8e8e;font-weight:400}
+ .d{font-size:10.5px;margin-top:3px}
+ .up{color:#73bf69}.dn{color:#f2495c}.wn{color:#ff9830}
+ .g2{display:grid;grid-template-columns:1.4fr 1fr;gap:11px;margin-bottom:11px}
+ .chart{height:168px;position:relative}
+ .axis{position:absolute;left:0;right:0;border-top:1px dashed #2c3235;font-size:9px;color:#5a5f66}
+ .leg{display:flex;gap:14px;font-size:10px;color:#9fa7b3;margin-top:7px}
+ .leg i{display:inline-block;width:9px;height:3px;border-radius:2px;margin-right:4px;vertical-align:2px}
+ table{width:100%;border-collapse:collapse;font-size:11px}
+ th{text-align:left;color:#8e8e8e;font-weight:600;padding:5px 0;border-bottom:1px solid #2c3235;font-size:10px}
+ td{padding:5.5px 0;border-bottom:1px solid #1f2227;color:#c8ccd2}
+ .st{padding:1.5px 7px;border-radius:9px;font-size:9.5px;font-weight:700}
+ .sok{background:#1c3d24;color:#73bf69}.swn{background:#4a3313;color:#ff9830}
+ .bars{display:flex;align-items:flex-end;gap:5px;height:120px}
+ .bars div{flex:1;background:linear-gradient(180deg,#3d71d9,#2a4d96);border-radius:3px 3px 0 0}
+ .lbl{display:flex;gap:5px;font-size:9px;color:#5a5f66;margin-top:5px}
+ .lbl span{flex:1;text-align:center}
+</style></head><body>
+<div class="hd">
+  <h1>AT-Integra · Observabilidade de produção
+    <small>Grafana 11 · fontes: Prometheus (cluster AKS) e Application Insights</small></h1>
+  <div class="rng"><div class="r">6 h</div><div class="r on">24 h</div><div class="r">7 d</div>
+    <div class="r">30 d</div><div class="r">↻ 30 s</div></div>
+</div>
+
+<div class="g">
+  <div class="p"><h2>Disponibilidade (24 h)</h2><div class="v">99,97<span>%</span></div>
+    <div class="d up">▲ acima do SLO contratado de 99,9%</div></div>
+  <div class="p"><h2>Latência p95 da API</h2><div class="v">212<span> ms</span></div>
+    <div class="d up">▼ 38% após o cache Redis</div></div>
+  <div class="p"><h2>Taxa de erro 5xx</h2><div class="v">0,08<span>%</span></div>
+    <div class="d up">11 ocorrências em 13.842 requisições</div></div>
+  <div class="p"><h2>Réplicas ativas (HPA)</h2><div class="v">7<span> / 12</span></div>
+    <div class="d wn">▲ escalou às 14h12 no pico de abertura</div></div>
+</div>
+
+<div class="g2">
+  <div class="p"><h2>Requisições por minuto e latência p95</h2>
+    <div class="chart">
+      <svg width="100%" height="168" viewBox="0 0 740 168" preserveAspectRatio="none">
+        <line x1="0" y1="40" x2="740" y2="40" stroke="#2c3235" stroke-dasharray="3 3"/>
+        <line x1="0" y1="80" x2="740" y2="80" stroke="#2c3235" stroke-dasharray="3 3"/>
+        <line x1="0" y1="120" x2="740" y2="120" stroke="#2c3235" stroke-dasharray="3 3"/>
+        <path d="M0,130 L46,124 L92,118 L138,112 L185,96 L231,74 L277,56 L323,44 L370,38 L416,46
+                 L462,62 L508,80 L555,92 L601,104 L647,116 L693,124 L740,132"
+              fill="none" stroke="#3d71d9" stroke-width="2"/>
+        <path d="M0,130 L46,124 L92,118 L138,112 L185,96 L231,74 L277,56 L323,44 L370,38 L416,46
+                 L462,62 L508,80 L555,92 L601,104 L647,116 L693,124 L740,132 L740,168 L0,168 Z"
+              fill="#3d71d9" opacity=".16"/>
+        <path d="M0,146 L46,144 L92,142 L138,140 L185,134 L231,126 L277,118 L323,108 L370,100
+                 L416,110 L462,122 L508,130 L555,136 L601,140 L647,143 L693,145 L740,147"
+              fill="none" stroke="#73bf69" stroke-width="1.8"/>
+      </svg>
+    </div>
+    <div class="leg"><span><i style="background:#3d71d9"></i>Requisições/min</span>
+      <span><i style="background:#73bf69"></i>Latência p95 (ms)</span>
+      <span style="margin-left:auto">00h &nbsp;·&nbsp; 06h &nbsp;·&nbsp; 12h &nbsp;·&nbsp; 18h &nbsp;·&nbsp; 24h</span></div>
+  </div>
+
+  <div class="p"><h2>Consumo de CPU por pod (%)</h2>
+    <div class="bars">
+      <div style="height:44%"></div><div style="height:52%"></div><div style="height:61%"></div>
+      <div style="height:58%"></div><div style="height:73%"></div><div style="height:88%"></div>
+      <div style="height:95%"></div><div style="height:79%"></div><div style="height:64%"></div>
+      <div style="height:55%"></div><div style="height:48%"></div><div style="height:41%"></div>
+    </div>
+    <div class="lbl"><span>08h</span><span>10h</span><span>12h</span><span>14h</span>
+      <span>16h</span><span>18h</span></div>
+  </div>
+</div>
+
+<div class="p">
+  <h2>Alertas e verificações de integridade</h2>
+  <table>
+    <tr><th style="width:26%">Regra</th><th style="width:16%">Componente</th>
+        <th style="width:18%">Condição</th><th style="width:18%">Última avaliação</th><th>Estado</th></tr>
+    <tr><td>Violação iminente de SLA crítico</td><td>api-chamados</td>
+        <td>prazo &lt; 30 min</td><td>há 28 s</td><td><span class="st swn">3 DISPARADOS</span></td></tr>
+    <tr><td>Latência p95 acima de 500 ms</td><td>api-chamados</td>
+        <td>5 min consecutivos</td><td>há 31 s</td><td><span class="st sok">NORMAL</span></td></tr>
+    <tr><td>Deadlocks no banco de dados</td><td>azure-sql</td>
+        <td>&gt; 0 em 15 min</td><td>há 44 s</td><td><span class="st sok">NORMAL</span></td></tr>
+    <tr><td>Reinício de contêiner em laço</td><td>aks-producao</td>
+        <td>CrashLoopBackOff</td><td>há 19 s</td><td><span class="st sok">NORMAL</span></td></tr>
+    <tr><td>Custo mensal acima do orçado</td><td>subscription</td>
+        <td>&gt; R$ 9.500,00</td><td>há 6 min</td><td><span class="st sok">NORMAL</span></td></tr>
+  </table>
+</div>
+</body></html>

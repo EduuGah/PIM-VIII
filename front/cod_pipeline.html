@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><title>ci-cd.yml</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f2f5;font:13px "Segoe UI",Arial,sans-serif;padding:16px}
+.win{background:#1e1e1e;border-radius:9px;overflow:hidden;
+     box-shadow:0 10px 28px rgba(15,25,45,.26)}
+.tb{background:#323233;display:flex;align-items:center;padding:0 12px;height:35px;gap:9px}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%;display:block}
+.tab{background:#1e1e1e;color:#ffffff;font-size:11.5px;padding:8px 14px;border-top:1.5px solid #0a84ff;
+     margin-left:8px;display:flex;align-items:center;gap:6px}
+.tab em{font-style:normal;color:#8a8a8a}
+.path{margin-left:auto;color:#9a9a9a;font-size:10.5px;font-family:Consolas,monospace}
+.code{display:flex;padding:11px 0 13px}
+.ln{color:#6e7681;text-align:right;padding:0 11px 0 15px;font:12.6px/1.62 Consolas,"Cascadia Mono",monospace;
+    user-select:none;border-right:1px solid #2b2b2b}
+pre{margin:0;padding:0 16px;font:12.6px/1.62 Consolas,"Cascadia Mono",monospace;color:#d4d4d4;
+    white-space:pre;overflow:visible}
+.sb{background:#007acc;color:#fff;font-size:10.5px;padding:3px 12px;display:flex;gap:16px}
+.sb span:last-child{margin-left:auto}
+
+.k{color:#569cd6}
+.kd{color:#569cd6}
+.kn{color:#569cd6}
+.kr{color:#569cd6}
+.kt{color:#569cd6}
+.kc{color:#569cd6}
+.kp{color:#569cd6}
+.c{color:#6a9955}
+.c1{color:#6a9955}
+.cm{color:#6a9955}
+.cs{color:#6a9955}
+.cp{color:#9b9b9b}
+.s{color:#ce9178}
+.s1{color:#ce9178}
+.s2{color:#ce9178}
+.sb{color:#ce9178}
+.sd{color:#ce9178}
+.se{color:#d7ba7d}
+.sh{color:#ce9178}
+.sx{color:#ce9178}
+.m{color:#b5cea8}
+.mi{color:#b5cea8}
+.mf{color:#b5cea8}
+.mh{color:#b5cea8}
+.n{color:#d4d4d4}
+.na{color:#9cdcfe}
+.nb{color:#4ec9b0}
+.nc{color:#4ec9b0}
+.nd{color:#dcdcaa}
+.nf{color:#dcdcaa}
+.ni{color:#9cdcfe}
+.nl{color:#c8c8c8}
+.nn{color:#4ec9b0}
+.nt{color:#569cd6}
+.nv{color:#9cdcfe}
+.no{color:#4fc1ff}
+.ne{color:#4ec9b0}
+.nx{color:#dcdcaa}
+.o{color:#d4d4d4}
+.ow{color:#569cd6}
+.p{color:#d4d4d4}
+.w{color:#d4d4d4}
+body{width:1040px}
+</style></head><body>
+<div class="win">
+  <div class="tb">
+    <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i>
+      <i style="background:#28c840"></i></div>
+    <div class="tab"><span style="color:#d2453c">&#9679;</span>ci-cd.yml
+      <em>&#215;</em></div>
+    <div class="path">codigo/devops/.github/workflows/ci-cd.yml</div>
+  </div>
+  <div class="code"><div class="ln">13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45</div><pre><span class="nt">jobs</span><span class="p">:</span>
+<span class="c1"># ---------------------------------------------------------------- CI</span>
+<span class="w">  </span><span class="nt">build-e-testes</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build, testes e analise estatica</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configurar .NET 8</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-dotnet@v4</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> dotnet-version</span><span class="p">:</span><span class="w"> </span><span class="s">'8.0.x'</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restaurar dependencias</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dotnet restore AlunosTech.sln</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Compilar em modo Release</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dotnet build --no-restore -c Release</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Executar testes com cobertura</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">dotnet test --no-build -c Release \</span>
+<span class="w">            </span><span class="no">--collect:"XPlat Code Coverage" \</span>
+<span class="w">            </span><span class="no">--logger trx --results-directory ./resultados</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Quality gate SonarQube (minimo 80% de cobertura)</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sonarsource/sonarqube-quality-gate-action@v1</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">SONAR_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.SONAR_TOKEN }}</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Varredura de vulnerabilidades em dependencias</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dotnet list package --vulnerable --include-transitive</span>
+</pre></div>
+  <div class="sb"><span>AlunosTech.sln</span><span>Ln 13</span>
+    <span>UTF-8</span><span>GitHub Actions</span></div>
+</div>
+</body></html>

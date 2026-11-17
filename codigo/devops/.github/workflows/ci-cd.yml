@@ -1,0 +1,101 @@
+name: CI/CD AT-Integra
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: atintegraacr.azurecr.io
+  IMAGEM: atintegra-api
+
+jobs:
+# ---------------------------------------------------------------- CI
+  build-e-testes:
+    name: Build, testes e analise estatica
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Configurar .NET 8
+        uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0.x' }
+
+      - name: Restaurar dependencias
+        run: dotnet restore AlunosTech.sln
+
+      - name: Compilar em modo Release
+        run: dotnet build --no-restore -c Release
+
+      - name: Executar testes com cobertura
+        run: |
+          dotnet test --no-build -c Release \
+            --collect:"XPlat Code Coverage" \
+            --logger trx --results-directory ./resultados
+
+      - name: Quality gate SonarQube (minimo 80% de cobertura)
+        uses: sonarsource/sonarqube-quality-gate-action@v1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Varredura de vulnerabilidades em dependencias
+        run: dotnet list package --vulnerable --include-transitive
+
+  seguranca-imagem:
+    name: DevSecOps - varredura da imagem
+    needs: build-e-testes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagem
+        run: docker build -t ${{ env.IMAGEM }}:${{ github.sha }} -f devops/Dockerfile .
+      - name: Trivy (falha em CRITICAL ou HIGH)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGEM }}:${{ github.sha }}
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+# ---------------------------------------------------------------- CD
+  publicar-homologacao:
+    name: Deploy em homologacao
+    needs: seguranca-imagem
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: homologacao
+    steps:
+      - uses: azure/login@v2
+        with: { creds: '${{ secrets.AZURE_CREDENTIALS }}' }
+      - name: Publicar imagem no ACR
+        run: |
+          az acr login --name atintegraacr
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGEM }}:${{ github.sha }}
+      - name: Aplicar manifestos no AKS
+        run: |
+          az aks get-credentials -g rg-atintegra -n aks-atintegra-hml
+          kubectl set image deployment/atintegra-api \
+            api=${{ env.REGISTRY }}/${{ env.IMAGEM }}:${{ github.sha }} -n homologacao
+          kubectl rollout status deployment/atintegra-api -n homologacao --timeout=180s
+
+  publicar-producao:
+    name: Deploy em producao (blue-green)
+    needs: publicar-homologacao
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: producao            # exige aprovacao manual do Product Owner
+    steps:
+      - name: Promover versao para o ambiente green
+        run: |
+          kubectl apply -f devops/k8s/deployment-green.yaml -n producao
+          kubectl rollout status deployment/atintegra-api-green -n producao
+      - name: Redirecionar trafego apos smoke test
+        run: |
+          ./devops/scripts/smoke-test.sh https://green.atintegra.com.br/health
+          kubectl patch service atintegra-api -n producao \
+            -p '{"spec":{"selector":{"versao":"green"}}}'
+      - name: Rollback automatico em caso de falha
+        if: failure()
+        run: kubectl rollout undo deployment/atintegra-api-green -n producao
