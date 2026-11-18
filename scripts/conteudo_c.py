@@ -6,10 +6,8 @@ BLOCOS_C = [
 # --------------------------------------------------------------- 5
 ("h1", "5 PROGRAMAÇÃO DE BANCO DE DADOS"),
 
-("p", "O banco de dados constitui o elemento central da solução, pois nele residem o "
- "registro contratual, a trilha de auditoria e as informações que embasam o faturamento. "
- "O sistema gerenciador escolhido foi o Microsoft SQL Server 2022, pela integração nativa "
- "com a plataforma .NET, pelos recursos de segurança em nível de linha e pela "
+("p", "O sistema gerenciador escolhido foi o Microsoft SQL Server 2022, pela integração "
+ "nativa com a plataforma .NET, pelos recursos de segurança em nível de linha e pela "
  "disponibilidade de serviço gerenciado equivalente na nuvem adotada."),
 
 ("h2", "5.1 Modelo de dados"),
@@ -21,7 +19,7 @@ BLOCOS_C = [
 
 ("fig", "fig_der.png",
  "Figura 7 – Modelo entidade-relacionamento do núcleo transacional",
- "Fonte: Elaborada pelos autores (2026).", 12.5),
+ "Fonte: Elaborada pelos autores (2026).", 14.0),
 
 ("p", "Quatro decisões de modelagem merecem registro: a coluna de versão do tipo "
  "rowversion, destinada ao controle de concorrência otimista; a exclusão lógica pela "
@@ -40,7 +38,7 @@ BLOCOS_C = [
 
 ("fig", "fig_cod_procedure.png",
  "Figura 8 – Procedimento armazenado transacional de abertura de chamado",
- "Fonte: Elaborada pelos autores (2026).", 12.5),
+ "Fonte: Elaborada pelos autores (2026).", 13.0),
 
 ("p", "O procedimento ilustra o tratamento transacional completo: XACT_ABORT assegura o "
  "desfazimento automático em erro grave e o bloco TRY/CATCH captura a exceção, registra a "
@@ -86,7 +84,7 @@ BLOCOS_C = [
 
 ("fig", "fig_desempenho.png",
  "Figura 9 – Tempo de resposta e leituras lógicas antes e depois da otimização",
- "Fonte: Elaborada pelos autores (2026).", 12.5),
+ "Fonte: Elaborada pelos autores (2026).", 13.5),
 
 ("p", "A consulta do painel caiu de 2.840 para 41 milissegundos, redução de 98,6%, e o "
  "relatório de nível de serviço, de 6.420 para 214 milissegundos. As leituras lógicas, "
@@ -114,8 +112,7 @@ BLOCOS_C = [
 # --------------------------------------------------------------- 6
 ("h1", "6 CLOUD COMPUTING E DEVOPS"),
 
-("p", "Esta seção apresenta a infraestrutura proposta em nuvem e as práticas de "
- "automação que sustentam sua operação. O Instituto Nacional de Padrões e Tecnologia "
+("p", "O Instituto Nacional de Padrões e Tecnologia "
  "define a computação em nuvem como o acesso ubíquo e sob demanda a um conjunto "
  "compartilhado de recursos configuráveis, provisionados com esforço mínimo de "
  "gerenciamento (MELL; GRANCE, 2011); são a elasticidade e o autoatendimento que "
@@ -175,7 +172,7 @@ BLOCOS_C = [
 
 ("fig", "fig_pipeline.png",
  "Figura 10 – Execução da esteira de integração e entrega contínuas",
- "Fonte: Elaborada pelos autores (2026).", 11.5),
+ "Fonte: Elaborada pelos autores (2026).", 14.0),
 
 ("p", "O primeiro estágio compila e executa os testes, interrompendo a esteira se a "
  "cobertura ficar abaixo de 80%. O segundo faz análise estática e varredura de "
@@ -227,13 +224,12 @@ BLOCOS_C = [
   ["Banco de dados gerenciado", "Camada crítica, 4 vCore, réplica", "2.740,00", "29,4"],
   ["Licenças e ferramentas da esteira", "6 assentos e repositório privado", "1.420,00", "15,3"],
   ["Rede, firewall de aplicação e distribuição", "Perfil padrão com proteção", "890,00", "9,6"],
-  ["Armazenamento de objetos e backup", "2 TB com retenção de 35 dias", "610,00", "6,5"],
-  ["Observabilidade e análise de registros", "180 dias de retenção", "470,00", "5,0"],
+  ["Armazenamento, backup e observabilidade", "2 TB e 180 dias de registros",
+   "1.080,00", "11,5"],
   ["Total mensal", "—", "9.310,00", "100,0"]],
  "Fonte: Elaborada pelos autores (2026)."),
 
-("p", "Comparado ao custo mensal de R$ 14.650,00 do parque local — que inclui "
- "depreciação, energia, licenças, suporte e horas de administração —, o novo arranjo "
- "representa economia de 36,4% e eleva a disponibilidade contratada, além de converter "
+("p", "Comparado ao custo mensal de R$ 14.650,00 do parque local, o novo arranjo "
+ "representa economia de 36,4%, eleva a disponibilidade contratada e converte "
  "investimento em despesa operacional."),
 ]

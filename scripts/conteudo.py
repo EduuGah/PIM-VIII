@@ -141,13 +141,6 @@ BLOCOS = [
  "que motivou a contratação de uma equipe de desenvolvimento para elaborar a proposta "
  "descrita neste trabalho."),
 
-("p", "O documento está organizado em oito seções. A seção 2 caracteriza a organização e "
- "apresenta o diagnóstico da situação-problema, os requisitos levantados e a visão geral "
- "da arquitetura proposta. A seção 3 trata do gerenciamento ágil do projeto. A seção 4 "
- "descreve a programação aplicada em .NET e os módulos corporativos. A seção 5 detalha a "
- "programação do banco de dados. A seção 6 aborda a computação em nuvem e as práticas de "
- "DevOps. A seção 7 discute os resultados obtidos e a seção 8 apresenta a conclusão."),
-
 # --------------------------------------------------------------- 2
 ("h1", "2 A EMPRESA ALUNOS TECH E A SITUAÇÃO-PROBLEMA"),
 
@@ -230,14 +223,13 @@ BLOCOS = [
 
 ("fig", "fig_arq_cloud.png",
  "Figura 1 – Topologia lógica da solução AT-Integra em nuvem",
- "Fonte: Elaborada pelos autores (2026).", 13.0),
+ "Fonte: Elaborada pelos autores (2026).", 15.5),
 
-("p", "O fluxo principal parte do canal de acesso do usuário — portal web, aplicativo "
- "móvel, módulo desktop ou integração de parceiros — e atravessa as camadas de proteção "
- "de borda, autenticação e limitação de requisições antes de alcançar os serviços do "
- "cluster. O processamento assíncrono, responsável por notificações e sincronizações, foi "
- "separado do síncrono para que tarefas demoradas não comprometam o tempo de resposta. A "
- "persistência é segregada por natureza do dado: o banco relacional guarda o núcleo "
- "transacional, o cache em memória atende às consultas repetitivas do painel e o "
- "armazenamento de objetos recebe as evidências dos atendimentos."),
+("p", "O fluxo parte do canal de acesso — portal web, aplicativo móvel, módulo desktop "
+ "ou integração de parceiros — e atravessa as camadas de proteção de borda, autenticação "
+ "e limitação de requisições antes de alcançar o cluster. O processamento assíncrono foi "
+ "separado do síncrono para que tarefas demoradas não comprometam o tempo de resposta, e "
+ "a persistência é segregada por natureza do dado: banco relacional para o núcleo "
+ "transacional, cache em memória para o painel e armazenamento de objetos para as "
+ "evidências."),
 ]

@@ -85,15 +85,14 @@ BLOCOS_B = [
 
 ("h2", "3.5 Acompanhamento do fluxo e métricas"),
 
-("p", "O quadro Kanban tornou visível o estado de cada item e explicitou os limites de "
- "trabalho em progresso definidos por coluna. A Figura 2 reproduz o quadro ao final da "
- "quinta sprint, momento em que a coluna de desenvolvimento atingiu seu limite, sinal que "
- "orientou a equipe a concentrar esforço na conclusão dos itens em revisão antes de "
- "iniciar novas tarefas."),
+("p", "O quadro Kanban tornou visível o estado de cada item e os limites de trabalho em "
+ "progresso de cada coluna. A Figura 2 reproduz o quadro ao final da quinta sprint, "
+ "quando a coluna de desenvolvimento atingiu o limite e orientou a equipe a concluir os "
+ "itens em revisão antes de iniciar novas tarefas."),
 
 ("fig", "fig_kanban.png",
  "Figura 2 – Quadro Kanban do projeto ao final da Sprint 5",
- "Fonte: Elaborada pelos autores (2026).", 12.5),
+ "Fonte: Elaborada pelos autores (2026).", 15.5),
 
 ("p", "As métricas de fluxo acompanhadas foram o tempo de atravessamento (3,4 dias em "
  "média), a vazão (nove itens por sprint) e o trabalho em progresso médio (6,8 itens), "
@@ -102,7 +101,7 @@ BLOCOS_B = [
 
 ("fig", "fig_burndown.png",
  "Figura 3 – Gráfico de queima (burndown) da Sprint 6",
- "Fonte: Elaborada pelos autores (2026).", 11.5),
+ "Fonte: Elaborada pelos autores (2026).", 14.0),
 
 ("p", "A indisponibilidade do ambiente de homologação entre o quinto e o sétimo dia "
  "paralisou a validação de duas histórias, o que produziu o patamar observado na curva "
@@ -152,11 +151,6 @@ BLOCOS_B = [
 # --------------------------------------------------------------- 4
 ("h1", "4 PROGRAMAÇÃO APLICADA EM .NET"),
 
-("p", "Esta seção descreve a construção dos módulos corporativos da plataforma sobre a "
- "plataforma .NET 8 e a linguagem C#. São apresentados a organização arquitetural da "
- "solução, a aplicação dos conceitos de orientação a objetos, os padrões de projeto "
- "adotados e as estratégias de desempenho, teste e manutenção."),
-
 ("h2", "4.1 Arquitetura modular da solução"),
 
 ("p", "A solução foi estruturada em quatro camadas, segundo os princípios da arquitetura "
@@ -182,7 +176,7 @@ BLOCOS_B = [
 
 ("fig", "fig_cod_entidade.png",
  "Figura 4 – Classe Chamado: encapsulamento e invariantes do domínio",
- "Fonte: Elaborada pelos autores (2026).", 12.5),
+ "Fonte: Elaborada pelos autores (2026).", 14.5),
 
 ("p", "Três decisões de projeto merecem destaque. Os atributos têm escrita privada, de "
  "modo que o estado só é alterado pelos métodos de negócio, o que impede que uma camada "
@@ -231,7 +225,7 @@ BLOCOS_B = [
 
 ("fig", "fig_web_painel.png",
  "Figura 5 – Painel de operações da aplicação web AT-Integra",
- "Fonte: Elaborada pelos autores (2026).", 12.5),
+ "Fonte: Elaborada pelos autores (2026).", 15.5),
 
 ("p", "O painel responde à pergunta operacional mais frequente da central: qual chamado "
  "deve ser tratado agora. Por isso a fila é ordenada por criticidade e por proximidade do "
@@ -250,7 +244,7 @@ BLOCOS_B = [
 
 ("fig", "fig_mobile.png",
  "Figura 6 – Aplicativo móvel: fila de atendimentos e execução em campo",
- "Fonte: Elaborada pelos autores (2026).", 9.5),
+ "Fonte: Elaborada pelos autores (2026).", 12.0),
 
 ("p", "Adotou-se a prioridade ao funcionamento local: toda alteração é gravada em banco "
  "SQLite no dispositivo e enfileirada para sincronização; restabelecida a conectividade, "

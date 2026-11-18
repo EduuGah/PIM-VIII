@@ -8,16 +8,16 @@ import re
 BASE = os.path.dirname(os.path.abspath(__file__))
 
 LARGURAS = {
-    "fig_arq_cloud.png": 13.0,
-    "fig_kanban.png": 12.5,
-    "fig_burndown.png": 11.5,
-    "fig_cod_entidade.png": 12.5,
-    "fig_web_painel.png": 12.5,
-    "fig_mobile.png": 9.5,
-    "fig_der.png": 12.5,
-    "fig_cod_procedure.png": 12.5,
-    "fig_desempenho.png": 12.5,
-    "fig_pipeline.png": 11.5,
+    "fig_arq_cloud.png": 15.5,
+    "fig_kanban.png": 15.5,
+    "fig_burndown.png": 14.0,
+    "fig_cod_entidade.png": 14.5,
+    "fig_web_painel.png": 15.5,
+    "fig_mobile.png": 12.0,
+    "fig_der.png": 14.0,
+    "fig_cod_procedure.png": 13.0,
+    "fig_desempenho.png": 13.5,
+    "fig_pipeline.png": 14.0,
 }
 
 PADRAO = re.compile(

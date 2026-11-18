@@ -6,12 +6,9 @@ BLOCOS_D = [
 # --------------------------------------------------------------- 7
 ("h1", "7 RESULTADOS OBTIDOS"),
 
-("p", "Esta seção consolida os resultados da solução proposta. A avaliação ocorreu em "
- "ambiente de demonstração, com base povoada a partir do histórico de doze meses de "
- "atendimento da Alunos Tech, o que permitiu comparar os cenários sob as mesmas condições "
- "de volume. A Tabela 5 reúne os indicadores selecionados, escolhidos por refletirem a "
- "obrigação contratual da empresa, a produtividade da equipe e a eficiência da entrega de "
- "software."),
+("p", "A avaliação ocorreu em ambiente de demonstração, com base povoada a partir do "
+ "histórico de doze meses de atendimento da Alunos Tech, o que permitiu comparar os "
+ "cenários sob as mesmas condições de volume. A Tabela 5 reúne os indicadores apurados."),
 
 ("tab", "Tabela 5 – Comparativo dos indicadores antes e depois da implantação",
  ["Indicador", "Cenário anterior", "Cenário proposto", "Variação"],
@@ -21,15 +18,12 @@ BLOCOS_D = [
   ["Tempo de resposta do painel gerencial", "2.840 ms", "41 ms", "−98,6%"],
   ["Chamados tratados por técnico ao mês", "46", "71", "+54,3%"],
   ["Implantações em produção por mês", "2", "42", "+1.900%"],
-  ["Tempo de restauração após falha", "6 h 00", "11 min", "−96,9%"],
   ["Custo mensal de operação", "R$ 14.650,00", "R$ 9.310,00", "−36,4%"]],
  "Fonte: Elaborada pelos autores (2026)."),
 
 ("p", "O resultado de maior relevância é a elevação da aderência ao nível de serviço de "
- "85,5% para 96,8%, ganho que decorre da articulação entre as disciplinas: o cálculo "
- "automático do prazo em C# eliminou a interpretação manual do contrato; o índice coberto "
- "reduziu a consulta do painel a 41 milissegundos; o alerta de observabilidade antecipa a "
- "notificação da supervisão; e a gestão ágil garantiu entrega incremental."),
+ "85,5% para 96,8%, ganho que decorre da articulação entre as quatro disciplinas, e não "
+ "de um componente isolado."),
 
 # --------------------------------------------------------------- 8
 ("h1", "8 CONCLUSÃO"),

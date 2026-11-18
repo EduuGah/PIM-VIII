@@ -297,14 +297,104 @@ def inserir_figura(doc, arquivo, legenda, fonte_texto, largura_cm):
               entrelinhas=1.0, espaco_depois=8)
 
 
+def larguras_colunas(cabecalhos, linhas, total=16.0, minimo=1.4):
+    """Distribui a largura das colunas conforme o volume de texto de cada uma.
+
+    O minimo de cada coluna considera a maior palavra que ela contem, de modo
+    que nenhuma palavra seja partida ao meio pela quebra de linha.
+    """
+    # a 9 pt, cada caractere ocupa cerca de 0,19 cm; 0,45 cm cobre as margens
+    LARGURA_CARACTERE, MARGEM_CELULA = 0.19, 0.45
+
+    pesos, minimos = [], []
+    for i in range(len(cabecalhos)):
+        textos = [cabecalhos[i]] + [linha[i] for linha in linhas]
+        pesos.append(max(max(len(t) for t in textos), 6))
+        maior_palavra = max((len(palavra) for t in textos for palavra in t.split()),
+                            default=4)
+        minimos.append(min(5.0, max(minimo,
+                                    maior_palavra * LARGURA_CARACTERE + MARGEM_CELULA)))
+
+    # se os minimos nao couberem, reduz todos proporcionalmente
+    if sum(minimos) > total * 0.95:
+        fator = total * 0.95 / sum(minimos)
+        minimos = [m * fator for m in minimos]
+
+    soma = float(sum(pesos))
+    larguras = [total * peso / soma for peso in pesos]
+
+    # eleva as colunas estreitas ao seu minimo, descontando das mais folgadas
+    for _ in range(6):
+        deficit = sum(max(0.0, minimos[i] - w) for i, w in enumerate(larguras))
+        if deficit < 0.01:
+            break
+        folgadas = [i for i, w in enumerate(larguras) if w > minimos[i]]
+        if not folgadas:
+            break
+        disponivel = sum(larguras[i] for i in folgadas)
+        larguras = [minimos[i] if w < minimos[i]
+                    else w - deficit * w / disponivel
+                    for i, w in enumerate(larguras)]
+
+    fator = total / sum(larguras)
+    return [w * fator for w in larguras]
+
+
+def fixar_largura_tabela(tabela, larguras):
+    """Aplica layout fixo: sem o ajuste automatico, o Word respeita as larguras."""
+    tbl_pr = tabela._tbl.tblPr
+
+    for marca in ("w:tblLayout", "w:tblW"):
+        antigo = tbl_pr.find(qn(marca))
+        if antigo is not None:
+            tbl_pr.remove(antigo)
+
+    layout = OxmlElement("w:tblLayout")
+    layout.set(qn("w:type"), "fixed")
+    tbl_pr.append(layout)
+
+    largura_total = OxmlElement("w:tblW")
+    largura_total.set(qn("w:w"), str(int(sum(larguras) * 567)))
+    largura_total.set(qn("w:type"), "dxa")
+    tbl_pr.append(largura_total)
+
+    tabela.autofit = False
+    for linha in tabela.rows:
+        for celula, largura in zip(linha.cells, larguras):
+            celula.width = Cm(largura)
+
+
+def manter_linha_inteira(linha, com_a_proxima):
+    """Impede que a linha se parta ao meio e, opcionalmente, que se separe
+    do que vem depois — e o que mantem a tabela inteira na mesma pagina."""
+    tr_pr = linha._tr.get_or_add_trPr()
+    tr_pr.append(OxmlElement("w:cantSplit"))
+    if com_a_proxima:
+        for celula in linha.cells:
+            for p in celula.paragraphs:
+                p.paragraph_format.keep_with_next = True
+
+
+def repetir_cabecalho(linha):
+    tr_pr = linha._tr.get_or_add_trPr()
+    tr_pr.append(OxmlElement("w:tblHeader"))
+
+
 def inserir_tabela(doc, titulo, cabecalhos, linhas, fonte_texto, estilo="abnt"):
     cab = paragrafo(doc, titulo, WD_ALIGN_PARAGRAPH.CENTER, 10, recuo_primeira=Cm(0),
                     entrelinhas=1.0, espaco_antes=4, espaco_depois=2)
     cab.paragraph_format.keep_with_next = True
 
+    larguras = larguras_colunas(cabecalhos, linhas)
+    # colunas com texto corrido ficam alinhadas a esquerda; as curtas, centradas
+    extensao = [max([len(cabecalhos[i])] + [len(l[i]) for l in linhas])
+                for i in range(len(cabecalhos))]
+    alinhamentos = [WD_ALIGN_PARAGRAPH.LEFT if (i == 0 or extensao[i] > 24)
+                    else WD_ALIGN_PARAGRAPH.CENTER
+                    for i in range(len(cabecalhos))]
+
     tabela = doc.add_table(rows=1, cols=len(cabecalhos))
     tabela.alignment = WD_TABLE_ALIGNMENT.CENTER
-    tabela.autofit = True
 
     for i, texto in enumerate(cabecalhos):
         celula = tabela.rows[0].cells[i]
@@ -321,15 +411,19 @@ def inserir_tabela(doc, titulo, cabecalhos, linhas, fonte_texto, estilo="abnt"):
         celulas = tabela.add_row().cells
         for i, valor in enumerate(linha):
             p = celulas[i].paragraphs[0]
-            p.alignment = (WD_ALIGN_PARAGRAPH.LEFT if i == 0
-                           else WD_ALIGN_PARAGRAPH.CENTER)
+            p.alignment = alinhamentos[i]
             p.paragraph_format.space_after = Pt(2)
             p.paragraph_format.space_before = Pt(2)
             p.paragraph_format.line_spacing = 1.0
             negrito = valor.lower().startswith("total")
             aplicar_fonte(p.add_run(valor), 9, negrito=negrito)
 
+    fixar_largura_tabela(tabela, larguras)
     bordas_tabela(tabela, estilo)
+    repetir_cabecalho(tabela.rows[0])
+    for linha in tabela.rows:
+        manter_linha_inteira(linha, com_a_proxima=True)
+
     paragrafo(doc, fonte_texto, WD_ALIGN_PARAGRAPH.LEFT, 10, recuo_primeira=Cm(0),
               entrelinhas=1.0, espaco_antes=2, espaco_depois=8)
 
@@ -364,12 +458,15 @@ def montar_desenvolvimento(doc):
         tipo = bloco[0]
 
         if tipo == "h1":
-            if not primeiro and bloco[1].startswith(SECOES_EM_NOVA_PAGINA):
-                quebra_pagina(doc)
+            nova_pagina = not primeiro and bloco[1].startswith(SECOES_EM_NOVA_PAGINA)
             primeiro = False
-            paragrafo(doc, bloco[1], WD_ALIGN_PARAGRAPH.LEFT, 12, True,
-                      recuo_primeira=Cm(0), espaco_antes=(0 if primeiro else 10),
-                      espaco_depois=8)
+            titulo = paragrafo(doc, bloco[1], WD_ALIGN_PARAGRAPH.LEFT, 12, True,
+                               recuo_primeira=Cm(0), espaco_antes=(0 if nova_pagina else 10),
+                               espaco_depois=8)
+            titulo.paragraph_format.keep_with_next = True
+            # a quebra vai no proprio titulo: um paragrafo de quebra avulso
+            # pode sobrar no fim da pagina anterior e gerar uma folha em branco
+            titulo.paragraph_format.page_break_before = nova_pagina
 
         elif tipo == "h2":
             titulo = paragrafo(doc, bloco[1], WD_ALIGN_PARAGRAPH.LEFT, 12, True,
@@ -395,9 +492,10 @@ def montar_desenvolvimento(doc):
 
 
 def montar_referencias(doc):
-    quebra_pagina(doc)
-    paragrafo(doc, "REFERÊNCIAS", WD_ALIGN_PARAGRAPH.CENTER, 12, True,
-              recuo_primeira=Cm(0), espaco_depois=12)
+    titulo = paragrafo(doc, "REFERÊNCIAS", WD_ALIGN_PARAGRAPH.CENTER, 12, True,
+                       recuo_primeira=Cm(0), espaco_depois=12)
+    titulo.paragraph_format.page_break_before = True
+    titulo.paragraph_format.keep_with_next = True
     for referencia in sorted(REFERENCIAS):
         p = paragrafo(doc, "", WD_ALIGN_PARAGRAPH.LEFT, recuo_primeira=Cm(0),
                       entrelinhas=1.0, espaco_depois=12)
@@ -406,9 +504,10 @@ def montar_referencias(doc):
 
 def montar_apendices(doc):
     for titulo, arquivos in APENDICES:
-        quebra_pagina(doc)
-        paragrafo(doc, titulo, WD_ALIGN_PARAGRAPH.CENTER, 12, True,
-                  recuo_primeira=Cm(0), espaco_depois=12)
+        cabecalho = paragrafo(doc, titulo, WD_ALIGN_PARAGRAPH.CENTER, 12, True,
+                              recuo_primeira=Cm(0), espaco_depois=12)
+        cabecalho.paragraph_format.page_break_before = True
+        cabecalho.paragraph_format.keep_with_next = True
         for subtitulo, caminho in arquivos:
             paragrafo(doc, subtitulo, WD_ALIGN_PARAGRAPH.LEFT, 11, True,
                       recuo_primeira=Cm(0), espaco_antes=10, espaco_depois=6,
